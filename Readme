@@ -1,0 +1,30 @@
+# GameTracker
+
+Tracker personal de videojuegos (Steam, Epic Games, emuladores y otros) que funciona completamente en local.
+
+## Uso
+
+```bash
+npm install
+npm run dev
+```
+
+Los juegos se guardan en `localStorage`. Puedes exportar/importar la biblioteca como JSON desde la barra de herramientas.
+
+## Documentación
+
+- [Convenciones, ramas y modelo de datos](docs/convenciones.md)
+- [Importadores](docs/importadores.md)
+
+## Scripts
+
+- `npm run dev`: servidor de desarrollo.
+- `npm run build`: comprobación de tipos y build de producción.
+- `npm run typecheck`: solo comprobación de tipos.
+- `npm run lint`: lint con oxlint.
+
+## Próximos pasos
+
+- Importadores específicos: exportación de Steam, `library.json` de Epic y carpetas ROM.
+- Modelo de datos ampliado (plataforma original, fecha de compra, etiquetas).
+- Backend y cuentas cuando haga falta sincronización.
