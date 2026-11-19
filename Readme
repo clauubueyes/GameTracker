@@ -26,6 +26,6 @@ Los juegos se guardan en `localStorage`. Puedes exportar/importar la biblioteca 
 
 ## Próximos pasos
 
-- Importador pendiente: carpetas de ROMs (Steam y Epic ya disponibles).
+- Importadores disponibles: Steam, Epic y carpetas de ROMs.
 - Modelo de datos ampliado (plataforma original, fecha de compra, etiquetas).
 - Backend y cuentas cuando haga falta sincronización.

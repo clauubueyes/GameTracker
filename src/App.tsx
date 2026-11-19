@@ -2,6 +2,7 @@ import { useEffect, useMemo, useRef, useState, type ChangeEvent } from 'react'
 import { GameForm } from './components/GameForm'
 import { GameList } from './components/GameList'
 import { Stats } from './components/Stats'
+import { parseRomFiles } from './imports/roms'
 import { exportGames, importGames, loadGames, saveGames } from './storage'
 import {
   EMPTY_DRAFT,
@@ -45,8 +46,13 @@ export default function App() {
   const [error, setError] = useState('')
   const [notice, setNotice] = useState('')
   const fileInputRef = useRef<HTMLInputElement>(null)
+  const directoryInputRef = useRef<HTMLInputElement>(null)
 
   useEffect(() => saveGames(games), [games])
+
+  useEffect(() => {
+    directoryInputRef.current?.setAttribute('webkitdirectory', '')
+  }, [])
 
   const visibleGames = useMemo(() => {
     const term = search.trim().toLocaleLowerCase()
@@ -121,6 +127,27 @@ export default function App() {
       setNotice('')
       setError(
         cause instanceof Error ? cause.message : 'No se pudo importar el archivo.',
+      )
+    }
+  }
+
+  const handleRoms = (event: ChangeEvent<HTMLInputElement>) => {
+    const files = Array.from(event.target.files ?? []).map((file) => ({
+      name: file.name,
+      webkitRelativePath: file.webkitRelativePath,
+    }))
+    event.target.value = ''
+    if (files.length === 0) return
+
+    try {
+      const imported = parseRomFiles(files)
+      setGames((current) => mergeGames(current, imported))
+      setNotice(`${imported.length} ROMs importadas.`)
+      setError('')
+    } catch (cause) {
+      setNotice('')
+      setError(
+        cause instanceof Error ? cause.message : 'No se pudo importar la carpeta.',
       )
     }
   }
@@ -215,12 +242,26 @@ export default function App() {
               hidden
               onChange={handleImport}
             />
+            <input
+              ref={directoryInputRef}
+              type="file"
+              multiple
+              hidden
+              onChange={handleRoms}
+            />
             <button
               type="button"
               className="button button--ghost"
               onClick={() => fileInputRef.current?.click()}
             >
               Importar archivos
+            </button>
+            <button
+              type="button"
+              className="button button--ghost"
+              onClick={() => directoryInputRef.current?.click()}
+            >
+              Importar ROMs
             </button>
             <button
               type="button"

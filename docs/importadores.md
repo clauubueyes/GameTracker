@@ -4,8 +4,8 @@ Los importadores transforman uno o varios archivos elegidos por el usuario en ju
 
 ## Flujo común
 
-1. El usuario selecciona uno o varios archivos desde **Importar archivos**.
-2. `parseImportedFiles` llama a `parseImportedFile` para cada archivo; este detecta el formato y valida el contenido.
+1. El usuario selecciona uno o varios archivos desde **Importar archivos**, o una carpeta desde **Importar ROMs**.
+2. `parseImportedFiles` llama a `parseImportedFile` para cada archivo; `parseRomFiles` procesa las carpetas de ROMs.
 3. `mergeGames` de `src/App.tsx` añade los juegos por `id`, sobrescribiendo los duplicados.
 4. Si hay un error, se muestra en la interfaz y la biblioteca actual queda intacta.
 
@@ -115,8 +115,23 @@ Se omiten los manifiestos con `bIsIncompleteInstall: true`, `bIsApplication: fal
 - `El archivo no contiene una lista de juegos.`: un `.item` sin `AppName` ni `CatalogItemId` no se reconoce como manifiesto de Epic.
 - `No se encontraron juegos válidos en los archivos de Epic.`: todos los manifiestos se omitieron por las reglas anteriores.
 
-## Orígenes pendientes
+## Emuladores / carpetas de ROMs
 
-| Origen | Estado |
-| --- | --- |
-| Emuladores / carpetas de ROMs | No implementado |
+Rama: `feat/import-roms`.
+
+### Cómo importar
+
+Pulsa **Importar ROMs** y elige la carpeta raíz de tu biblioteca. Requiere un navegador con soporte para selección de carpetas (`webkitdirectory`), como Chrome, Edge o Firefox. Los archivos se leen en el navegador; no se suben a ningún servidor.
+
+### Reglas
+
+- Se ignoran los archivos cuyas extensiones no son de ROM (por ejemplo `.txt`, `.png` o `.nfo`). Se reconocen extensiones habituales como `.zip`, `.7z`, `.rom`, `.nes`, `.snes`, `.gba`, `.nds`, `.n64`, `.iso`, `.chd`, `.cue`, `.bin`, `.3ds`, `.psx` y similares; la lista completa está en `src/imports/roms.ts`.
+- El título es el nombre del archivo sin extensión, sin grupos `(...)`, `[...]` y con `_` convertidos en espacios.
+- El `id` es `rom-<slug(carpeta + título)>`, por lo que volver a importar la misma carpeta no crea duplicados.
+- `plataforma` es siempre `emulator`, `estado` es `backlog` y `horas`/`valoración` son `0`.
+- `notas` guarda la ruta relativa del archivo como `ROM: <ruta>` para saber de dónde viene el juego.
+- `Juego.bin` y `Juego.cue` en la misma carpeta se colapsan en una sola entrada.
+
+### Errores frecuentes
+
+- `No se encontraron ROMs con extensiones reconocidas.`: la carpeta seleccionada no contiene archivos con extensiones de ROM.
