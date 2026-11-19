@@ -16,6 +16,7 @@ Los juegos se guardan en `localStorage`. Puedes exportar/importar la biblioteca 
 - [Convenciones y ramas](docs/convenciones.md)
 - [Modelo de datos](docs/modelo-datos.md)
 - [Importadores](docs/importadores.md)
+- [Interfaz, filtros y gráficas](docs/interfaz.md)
 
 ## Scripts
 

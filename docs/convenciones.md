@@ -30,14 +30,16 @@ npm run test
 npm run build
 ```
 
-Antes de abrir una PR deben pasar `typecheck`, `lint`, `test` y `build`. Los formatos de importación se cubren con tests en `src/imports`.
+Antes de abrir una PR deben pasar `typecheck`, `lint`, `test` y `build`. Los formatos de importación se cubren en `src/imports` y la lógica de filtrado en `src/filters.test.ts`.
 
 ## Estructura
 
 ```
 src/
-  App.tsx              estado global, filtros y orquestación
-  components/          UI presentacional y formularios
+  App.tsx              estado global y orquestación
+  components/          UI presentacional, formularios y gráficas
+  filters.ts           búsqueda, filtros y ordenación
+  imports/             normalización y parsers de cada origen
   storage.ts           localStorage, importación y exportación JSON
   types.ts             modelos y constantes compartidas
 docs/                  documentación de decisiones y formatos

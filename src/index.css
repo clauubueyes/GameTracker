@@ -129,6 +129,87 @@ p {
   font-size: 0.85rem;
 }
 
+.charts {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+  margin-bottom: 24px;
+}
+
+.chart {
+  padding: 18px 20px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+}
+
+.chart h2 {
+  font-size: 0.95rem;
+  margin-bottom: 14px;
+}
+
+.chart__rows {
+  display: grid;
+  gap: 10px;
+}
+
+.chart-row {
+  display: grid;
+  grid-template-columns: 96px 1fr 24px;
+  align-items: center;
+  gap: 10px;
+  font-size: 0.8rem;
+}
+
+.chart-row__label {
+  color: var(--muted);
+}
+
+.chart-row__track {
+  height: 8px;
+  border-radius: 999px;
+  background: var(--surface-2);
+  overflow: hidden;
+}
+
+.chart-row__fill {
+  height: 100%;
+  border-radius: 999px;
+  transition: width 200ms ease;
+}
+
+.chart-row__value {
+  text-align: right;
+  color: var(--muted);
+  font-variant-numeric: tabular-nums;
+}
+
+.chart-row__fill--platform-steam,
+.chart-row__fill--status-playing {
+  background: #6ee7c7;
+}
+
+.chart-row__fill--platform-epic,
+.chart-row__fill--status-completed {
+  background: #9f8cff;
+}
+
+.chart-row__fill--platform-emulator {
+  background: #ffc46b;
+}
+
+.chart-row__fill--platform-other {
+  background: #7f8da3;
+}
+
+.chart-row__fill--status-backlog {
+  background: #6aa9ff;
+}
+
+.chart-row__fill--status-dropped {
+  background: #ff7a85;
+}
+
 .toolbar {
   display: flex;
   flex-wrap: wrap;
@@ -477,6 +558,10 @@ p {
 
   .stats {
     grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .charts {
+    grid-template-columns: 1fr;
   }
 
   .toolbar__actions {

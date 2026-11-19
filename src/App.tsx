@@ -1,7 +1,14 @@
 import { useEffect, useMemo, useRef, useState, type ChangeEvent } from 'react'
+import { Charts } from './components/Charts'
 import { GameForm } from './components/GameForm'
 import { GameList } from './components/GameList'
 import { Stats } from './components/Stats'
+import {
+  filterAndSortGames,
+  getAvailableTags,
+  getAvailableYears,
+  type SortKey,
+} from './filters'
 import { parseRomFiles } from './imports/roms'
 import { exportGames, importGames, loadGames, saveGames } from './storage'
 import {
@@ -15,8 +22,6 @@ import {
   type Platform,
   type Status,
 } from './types'
-
-type SortKey = 'updated' | 'title' | 'hours'
 
 function toDraft(game: Game): GameDraft {
   return {
@@ -43,6 +48,8 @@ export default function App() {
   const [search, setSearch] = useState('')
   const [platform, setPlatform] = useState<Platform | 'all'>('all')
   const [status, setStatus] = useState<Status | 'all'>('all')
+  const [tag, setTag] = useState('')
+  const [year, setYear] = useState('')
   const [sort, setSort] = useState<SortKey>('updated')
   const [editing, setEditing] = useState<Game | null>(null)
   const [showForm, setShowForm] = useState(false)
@@ -57,24 +64,36 @@ export default function App() {
     directoryInputRef.current?.setAttribute('webkitdirectory', '')
   }, [])
 
-  const visibleGames = useMemo(() => {
-    const term = search.trim().toLocaleLowerCase()
-    const filtered = games.filter((game) => {
-      const matchesSearch =
-        !term ||
-        game.title.toLocaleLowerCase().includes(term) ||
-        game.notes.toLocaleLowerCase().includes(term)
-      const matchesPlatform = platform === 'all' || game.platform === platform
-      const matchesStatus = status === 'all' || game.status === status
-      return matchesSearch && matchesPlatform && matchesStatus
-    })
+  const availableTags = useMemo(() => getAvailableTags(games), [games])
+  const availableYears = useMemo(() => getAvailableYears(games), [games])
 
-    return filtered.sort((a, b) => {
-      if (sort === 'title') return a.title.localeCompare(b.title)
-      if (sort === 'hours') return b.hours - a.hours
-      return b.updatedAt.localeCompare(a.updatedAt)
-    })
-  }, [games, search, platform, status, sort])
+  const visibleGames = useMemo(
+    () =>
+      filterAndSortGames(games, {
+        search,
+        platform,
+        status,
+        tag,
+        year,
+        sort,
+      }),
+    [games, search, platform, status, tag, year, sort],
+  )
+
+  const hasFilters =
+    search !== '' ||
+    platform !== 'all' ||
+    status !== 'all' ||
+    tag !== '' ||
+    year !== ''
+
+  const clearFilters = () => {
+    setSearch('')
+    setPlatform('all')
+    setStatus('all')
+    setTag('')
+    setYear('')
+  }
 
   const handleSave = (draft: GameDraft) => {
     const now = new Date().toISOString()
@@ -188,6 +207,7 @@ export default function App() {
 
       <main>
         <Stats games={games} />
+        <Charts games={games} />
 
         <section className="toolbar" aria-label="Herramientas de la biblioteca">
           <div className="toolbar__filters">
@@ -195,7 +215,7 @@ export default function App() {
               className="search"
               type="search"
               value={search}
-              placeholder="Buscar juegos o notas..."
+              placeholder="Buscar juegos, notas o etiquetas..."
               aria-label="Buscar juegos"
               onChange={(event) => setSearch(event.target.value)}
             />
@@ -226,6 +246,30 @@ export default function App() {
               ))}
             </select>
             <select
+              value={tag}
+              aria-label="Filtrar por etiqueta"
+              onChange={(event) => setTag(event.target.value)}
+            >
+              <option value="">Todas las etiquetas</option>
+              {availableTags.map((item) => (
+                <option key={item} value={item}>
+                  #{item}
+                </option>
+              ))}
+            </select>
+            <select
+              value={year}
+              aria-label="Filtrar por año de compra"
+              onChange={(event) => setYear(event.target.value)}
+            >
+              <option value="">Todos los años</option>
+              {availableYears.map((item) => (
+                <option key={item} value={item}>
+                  {item}
+                </option>
+              ))}
+            </select>
+            <select
               value={sort}
               aria-label="Ordenar juegos"
               onChange={(event) => setSort(event.target.value as SortKey)}
@@ -252,6 +296,11 @@ export default function App() {
               hidden
               onChange={handleRoms}
             />
+            {hasFilters && (
+              <button type="button" className="button button--ghost" onClick={clearFilters}>
+                Limpiar filtros
+              </button>
+            )}
             <button
               type="button"
               className="button button--ghost"
