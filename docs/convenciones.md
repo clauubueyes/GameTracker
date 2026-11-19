@@ -26,10 +26,11 @@ Se usa Conventional Commits en español o inglés, con prefijos:
 npm run dev
 npm run typecheck
 npm run lint
+npm run test
 npm run build
 ```
 
-Antes de abrir una PR deben pasar `typecheck`, `lint` y `build`.
+Antes de abrir una PR deben pasar `typecheck`, `lint`, `test` y `build`. Los formatos de importación se cubren con tests en `src/imports`.
 
 ## Estructura
 

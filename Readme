@@ -22,9 +22,10 @@ Los juegos se guardan en `localStorage`. Puedes exportar/importar la biblioteca 
 - `npm run build`: comprobación de tipos y build de producción.
 - `npm run typecheck`: solo comprobación de tipos.
 - `npm run lint`: lint con oxlint.
+- `npm run test`: tests de importadores con Vitest.
 
 ## Próximos pasos
 
-- Importadores específicos: exportación de Steam, `library.json` de Epic y carpetas ROM.
+- Importadores pendientes: `library.json` de Epic y carpetas ROM (Steam ya disponible).
 - Modelo de datos ampliado (plataforma original, fecha de compra, etiquetas).
 - Backend y cuentas cuando haga falta sincronización.
