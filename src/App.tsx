@@ -108,12 +108,12 @@ export default function App() {
   }
 
   const handleImport = async (event: ChangeEvent<HTMLInputElement>) => {
-    const file = event.target.files?.[0]
+    const files = Array.from(event.target.files ?? [])
     event.target.value = ''
-    if (!file) return
+    if (files.length === 0) return
 
     try {
-      const imported = await importGames(file)
+      const imported = await importGames(files)
       setGames((current) => mergeGames(current, imported))
       setNotice(`${imported.length} juegos importados.`)
       setError('')
@@ -210,7 +210,8 @@ export default function App() {
             <input
               ref={fileInputRef}
               type="file"
-              accept="application/json,.json"
+              accept="application/json,.json,.item"
+              multiple
               hidden
               onChange={handleImport}
             />
@@ -219,7 +220,7 @@ export default function App() {
               className="button button--ghost"
               onClick={() => fileInputRef.current?.click()}
             >
-              Importar
+              Importar archivos
             </button>
             <button
               type="button"

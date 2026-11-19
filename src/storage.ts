@@ -1,4 +1,4 @@
-import { parseImportedFile } from './imports'
+import { parseImportedFiles } from './imports'
 import type { Game } from './types'
 
 const STORAGE_KEY = 'gametracker.games.v1'
@@ -6,7 +6,7 @@ const STORAGE_KEY = 'gametracker.games.v1'
 export function loadGames(): Game[] {
   try {
     const raw = localStorage.getItem(STORAGE_KEY)
-    return raw ? parseImportedFile(raw) : []
+    return raw ? parseImportedFiles([raw]) : []
   } catch {
     return []
   }
@@ -32,6 +32,6 @@ export function exportGames(games: Game[]): void {
   setTimeout(() => URL.revokeObjectURL(url), 0)
 }
 
-export async function importGames(file: File): Promise<Game[]> {
-  return parseImportedFile(await file.text())
+export async function importGames(files: File[]): Promise<Game[]> {
+  return parseImportedFiles(await Promise.all(files.map((file) => file.text())))
 }

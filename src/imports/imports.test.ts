@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { parseImportedFile } from './index'
+import { parseImportedFile, parseImportedFiles } from './index'
 
 describe('parseImportedFile', () => {
   it('importa la respuesta GetOwnedGames de Steam', () => {
@@ -98,5 +98,84 @@ describe('parseImportedFile', () => {
     expect(() =>
       parseImportedFile(JSON.stringify({ response: { games: [] } })),
     ).toThrow('No se encontraron juegos válidos en el archivo de Steam.')
+  })
+
+  it('importa un manifiesto .item de Epic', () => {
+    const games = parseImportedFile(
+      JSON.stringify({
+        FormatVersion: 0,
+        AppName: 'Turaco',
+        DisplayName: 'Nuclear Throne',
+        CatalogNamespace: '742f165671424189aecdfdadf5ea9755',
+        CatalogItemId: '3524134c7a4e4cf2832d8d2a634baef8',
+        InstallLocation: 'D:\\Epic Games\\NuclearThrone',
+        bIsApplication: true,
+        bIsExecutable: true,
+        bIsIncompleteInstall: false,
+      }),
+    )
+
+    expect(games).toHaveLength(1)
+    expect(games[0]).toMatchObject({
+      id: 'epic-3524134c7a4e4cf2832d8d2a634baef8',
+      title: 'Nuclear Throne',
+      platform: 'epic',
+      status: 'backlog',
+      hours: 0,
+    })
+  })
+
+  it('ignora componentes y componentes incompletos de Epic', () => {
+    const games = parseImportedFile(
+      JSON.stringify([
+        {
+          AppName: 'Game',
+          DisplayName: 'Juego',
+          CatalogItemId: 'game',
+          bIsApplication: true,
+        },
+        {
+          AppName: 'Dlc',
+          DisplayName: 'DLC',
+          CatalogItemId: 'dlc',
+          bIsApplication: false,
+        },
+        {
+          AppName: 'Broken',
+          DisplayName: 'Roto',
+          CatalogItemId: 'broken',
+          bIsIncompleteInstall: true,
+        },
+      ]),
+    )
+
+    expect(games).toHaveLength(1)
+    expect(games[0].title).toBe('Juego')
+  })
+
+  it('combina varios archivos y deduplica por id', () => {
+    const games = parseImportedFiles([
+      JSON.stringify({
+        AppName: 'Game',
+        DisplayName: 'Juego',
+        CatalogItemId: 'game',
+      }),
+      JSON.stringify({
+        AppName: 'Game',
+        DisplayName: 'Juego actualizado',
+        CatalogItemId: 'game',
+      }),
+      JSON.stringify({
+        response: {
+          games: [{ appid: 10, name: 'Steam', playtime_forever: 60 }],
+        },
+      }),
+    ])
+
+    expect(games).toHaveLength(2)
+    expect(games.find((game) => game.id === 'epic-game')?.title).toBe(
+      'Juego actualizado',
+    )
+    expect(games.find((game) => game.id === 'steam-10')?.platform).toBe('steam')
   })
 })
