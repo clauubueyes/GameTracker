@@ -31,6 +31,7 @@ describe('parseImportedFile', () => {
       title: 'Hollow Knight',
       platform: 'steam',
       status: 'backlog',
+      originalPlatform: 'PC',
       hours: 52,
       rating: 0,
     })
@@ -121,6 +122,7 @@ describe('parseImportedFile', () => {
       title: 'Nuclear Throne',
       platform: 'epic',
       status: 'backlog',
+      originalPlatform: 'PC',
       hours: 0,
     })
   })
@@ -177,5 +179,31 @@ describe('parseImportedFile', () => {
       'Juego actualizado',
     )
     expect(games.find((game) => game.id === 'steam-10')?.platform).toBe('steam')
+  })
+
+  it('normaliza plataforma original, fecha de compra y etiquetas', () => {
+    const games = parseImportedFile(
+      JSON.stringify({
+        games: [
+          {
+            title: 'Juego',
+            originalPlatform: ' NES ',
+            purchaseDate: '2024-02-29',
+            tags: [' RPG ', 'rpg', 'retro', 3, ''],
+          },
+          {
+            title: 'Con fecha inválida',
+            purchaseDate: '2024-02-30',
+          },
+        ],
+      }),
+    )
+
+    expect(games[0]).toMatchObject({
+      originalPlatform: 'NES',
+      purchaseDate: '2024-02-29',
+      tags: ['RPG', 'retro'],
+    })
+    expect(games[1].purchaseDate).toBe('')
   })
 })

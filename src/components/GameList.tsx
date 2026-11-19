@@ -42,6 +42,21 @@ export function GameList({ games, filtered, onEdit, onDelete }: GameListProps) {
                 {STATUS_LABELS[game.status]}
               </span>
             </div>
+            {(game.originalPlatform || game.purchaseDate || game.tags.length > 0) && (
+              <div className="game-card__details">
+                {game.originalPlatform && <span>Origen: {game.originalPlatform}</span>}
+                {game.purchaseDate && <span>Comprado: {game.purchaseDate}</span>}
+                {game.tags.length > 0 && (
+                  <div className="tags">
+                    {game.tags.map((tag) => (
+                      <span key={tag} className="tag">
+                        #{tag}
+                      </span>
+                    ))}
+                  </div>
+                )}
+              </div>
+            )}
             {game.notes && <p className="game-card__notes">{game.notes}</p>}
           </div>
 

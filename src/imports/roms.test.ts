@@ -23,6 +23,7 @@ describe('parseRomFiles', () => {
     expect(games[0]).toMatchObject({
       platform: 'emulator',
       status: 'backlog',
+      originalPlatform: 'NES',
       hours: 0,
     })
   })

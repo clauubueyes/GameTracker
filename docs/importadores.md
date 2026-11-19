@@ -11,6 +11,10 @@ Los importadores transforman uno o varios archivos elegidos por el usuario en ju
 
 Los formatos se detectan por la forma del JSON, no por el nombre del archivo. Cuando se importan varios archivos, el último que defina un `id` gana.
 
+## Campos comunes
+
+Todos los importadores dejan `purchaseDate` y `tags` vacíos para que los complete el usuario. `originalPlatform` es `PC` en Steam y Epic, y se infiere de la extensión del archivo en ROMs. El resto de campos se detalla en [modelo-datos.md](modelo-datos.md).
+
 ## Copia de GameTracker
 
 Es el archivo generado por **Exportar**:

@@ -9,6 +9,18 @@ import {
   type Status,
 } from '../types'
 
+function parseTags(text: string): string[] {
+  const tags = new Map<string, string>()
+  for (const raw of text.split(',')) {
+    const tag = raw.trim()
+    if (!tag) continue
+
+    const key = tag.toLocaleLowerCase()
+    if (!tags.has(key)) tags.set(key, tag)
+  }
+  return [...tags.values()]
+}
+
 interface GameFormProps {
   initial: GameDraft
   isEditing: boolean
@@ -23,6 +35,7 @@ export function GameForm({
   onCancel,
 }: GameFormProps) {
   const [draft, setDraft] = useState<GameDraft>(initial)
+  const [tagsText, setTagsText] = useState(initial.tags.join(', '))
 
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault()
@@ -33,6 +46,7 @@ export function GameForm({
       ...draft,
       title,
       hours: Math.max(0, draft.hours),
+      tags: parseTags(tagsText),
     })
   }
 
@@ -119,12 +133,43 @@ export function GameForm({
           </select>
         </label>
 
+        <label className="field">
+          <span>Plataforma original</span>
+          <input
+            value={draft.originalPlatform}
+            placeholder="Ej. NES, PC, PlayStation 2"
+            onChange={(event) =>
+              setDraft({ ...draft, originalPlatform: event.target.value })
+            }
+          />
+        </label>
+
+        <label className="field">
+          <span>Fecha de compra</span>
+          <input
+            type="date"
+            value={draft.purchaseDate}
+            onChange={(event) =>
+              setDraft({ ...draft, purchaseDate: event.target.value })
+            }
+          />
+        </label>
+
+        <label className="field field--wide">
+          <span>Etiquetas (separadas por comas)</span>
+          <input
+            value={tagsText}
+            placeholder="Ej. RPG, retro, favoritos"
+            onChange={(event) => setTagsText(event.target.value)}
+          />
+        </label>
+
         <label className="field field--wide">
           <span>Notas</span>
           <textarea
             rows={2}
             value={draft.notes}
-            placeholder="Comentarios, progreso, plataforma original..."
+            placeholder="Comentarios, progreso..."
             onChange={(event) => setDraft({ ...draft, notes: event.target.value })}
           />
         </label>

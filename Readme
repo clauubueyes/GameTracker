@@ -13,7 +13,8 @@ Los juegos se guardan en `localStorage`. Puedes exportar/importar la biblioteca 
 
 ## Documentación
 
-- [Convenciones, ramas y modelo de datos](docs/convenciones.md)
+- [Convenciones y ramas](docs/convenciones.md)
+- [Modelo de datos](docs/modelo-datos.md)
 - [Importadores](docs/importadores.md)
 
 ## Scripts
@@ -27,5 +28,5 @@ Los juegos se guardan en `localStorage`. Puedes exportar/importar la biblioteca 
 ## Próximos pasos
 
 - Importadores disponibles: Steam, Epic y carpetas de ROMs.
-- Modelo de datos ampliado (plataforma original, fecha de compra, etiquetas).
+- Modelo de datos ampliado: plataforma original, fecha de compra y etiquetas.
 - Backend y cuentas cuando haga falta sincronización.

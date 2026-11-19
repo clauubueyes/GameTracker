@@ -26,6 +26,9 @@ function toDraft(game: Game): GameDraft {
     hours: game.hours,
     rating: game.rating,
     notes: game.notes,
+    originalPlatform: game.originalPlatform,
+    purchaseDate: game.purchaseDate,
+    tags: game.tags,
   }
 }
 

@@ -369,6 +369,29 @@ p {
   border-color: #8a414b;
 }
 
+.game-card__details {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px 14px;
+  margin-top: 10px;
+  color: var(--muted);
+  font-size: 0.8rem;
+}
+
+.tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.tag {
+  padding: 2px 8px;
+  border-radius: 999px;
+  background: rgba(110, 231, 199, 0.1);
+  color: var(--accent);
+}
+
 .game-card__notes {
   color: var(--muted);
   font-size: 0.85rem;

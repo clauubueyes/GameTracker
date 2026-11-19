@@ -45,7 +45,7 @@ docs/                  documentación de decisiones y formatos
 
 ## Modelo de datos
 
-Un juego tiene `id`, `título`, `plataforma` (`steam`, `epic`, `emulator`, `other`), `estado` (`playing`, `completed`, `backlog`, `dropped`), `horas`, `valoración` (0-5), `notas` y fechas `addedAt`/`updatedAt` en ISO.
+Un juego tiene `id`, `título`, `plataforma`, `estado`, `horas`, `valoración`, `notas`, plataforma original, fecha de compra, etiquetas y fechas `addedAt`/`updatedAt` en ISO. La definición completa y las reglas de normalización están en [modelo-datos.md](modelo-datos.md).
 
 La biblioteca se guarda en `localStorage` bajo la clave `gametracker.games.v1`. El archivo exportado es `{ "version": 1, "games": [...] }` y se puede volver a importar; los juegos con el mismo `id` se sobrescriben.
 

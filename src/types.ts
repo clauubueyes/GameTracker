@@ -12,13 +12,24 @@ export interface Game {
   hours: number
   rating: number
   notes: string
+  originalPlatform: string
+  purchaseDate: string
+  tags: string[]
   addedAt: string
   updatedAt: string
 }
 
 export type GameDraft = Pick<
   Game,
-  'title' | 'platform' | 'status' | 'hours' | 'rating' | 'notes'
+  | 'title'
+  | 'platform'
+  | 'status'
+  | 'hours'
+  | 'rating'
+  | 'notes'
+  | 'originalPlatform'
+  | 'purchaseDate'
+  | 'tags'
 >
 
 export const PLATFORM_LABELS: Record<Platform, string> = {
@@ -42,4 +53,7 @@ export const EMPTY_DRAFT: GameDraft = {
   hours: 0,
   rating: 0,
   notes: '',
+  originalPlatform: '',
+  purchaseDate: '',
+  tags: [],
 }

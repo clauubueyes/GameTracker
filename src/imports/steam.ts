@@ -58,6 +58,9 @@ function toGame(value: unknown): Game | null {
     hours: Math.round((playtimeForever / 60) * 10) / 10,
     rating: 0,
     notes: '',
+    originalPlatform: 'PC',
+    purchaseDate: '',
+    tags: [],
     addedAt: now,
     updatedAt: now,
   }

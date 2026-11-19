@@ -54,6 +54,27 @@ const ROM_EXTENSIONS = new Set([
   'z80',
 ])
 
+const CONSOLE_BY_EXTENSION: Record<string, string> = {
+  gb: 'Game Boy',
+  gba: 'Game Boy Advance',
+  gbc: 'Game Boy Color',
+  genesis: 'Genesis',
+  md: 'Genesis',
+  n64: 'Nintendo 64',
+  nds: 'Nintendo DS',
+  nes: 'NES',
+  pce: 'PC Engine',
+  ps2: 'PlayStation 2',
+  psp: 'PSP',
+  psx: 'PlayStation',
+  snes: 'SNES',
+  v64: 'Nintendo 64',
+  wbfs: 'Wii',
+  wii: 'Wii',
+  z64: 'Nintendo 64',
+  '3ds': 'Nintendo 3DS',
+}
+
 function extensionOf(name: string): string {
   const index = name.lastIndexOf('.')
   return index > 0 ? name.slice(index + 1).toLowerCase() : ''
@@ -110,6 +131,9 @@ export function parseRomFiles(inputs: RomFileInput[]): Game[] {
       hours: 0,
       rating: 0,
       notes: `ROM: ${relativePath(input)}`,
+      originalPlatform: CONSOLE_BY_EXTENSION[extensionOf(input.name)] ?? '',
+      purchaseDate: '',
+      tags: [],
       addedAt: now,
       updatedAt: now,
     })

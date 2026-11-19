@@ -45,6 +45,9 @@ function toGame(item: Record<string, unknown>): Game | null {
     hours: 0,
     rating: 0,
     notes: '',
+    originalPlatform: 'PC',
+    purchaseDate: '',
+    tags: [],
     addedAt: now,
     updatedAt: now,
   }
